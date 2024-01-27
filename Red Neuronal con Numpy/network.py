@@ -11,14 +11,14 @@ and omits many desirable features.
 
 #### Libraries
 # Standard library
-import random
+import random  # esta libreria sirve para imporatar valores aleatorios 
 
 # Third-party libraries
-import numpy as np
+import numpy as np   #crear vectores y matrices grandes multidimensionales y con muchas funciones matematicas 
 
-class Network(object):
+class Network(object):    #definims una clase network que tiene cosas de objeto.
 
-    def __init__(self, sizes):
+    def __init__(self, sizes):  #función que se ejecuta cuando creamos un objeto, con 2 parametros. 
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the
@@ -29,20 +29,21 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
-        self.num_layers = len(sizes)
-        self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x)
+        self.num_layers = len(sizes)    #se define la longitud para saber el numero d capas.
+        self.sizes = sizes #a el mismo guarda las lonitudes de sus capas 
+        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]  #los pesos y sesgos en la clase de network empiezan por el np.random.rand que esta en la libreria que se importo.
+        self.weights = [np.random.randn(y, x)  #analogo.
                         for x, y in zip(sizes[:-1], sizes[1:])]
 
-    def feedforward(self, a):
+    def feedforward(self, a):  #de lo que metes en la entrada, se procesa capa por capa usando las listas de bias y pesos y las funciones de activacion y regresa a la salida de la red.
         """Return the output of the network if ``a`` is input."""
         for b, w in zip(self.biases, self.weights):
             a = sigmoid(np.dot(w, a)+b)
         return a
 
     def SGD(self, training_data, epochs, mini_batch_size, eta,
-            test_data=None):
+            test_data=None): # el graiente estocastico es metodo de aprendizaje que al inicio de cada epoca empieza aleatoriamente lo datos de entrenamiento de aca sale mini_batch y a estos les ponemos el  self.update_mini_batch(mini_batch, eta)
+        #ahora para el training_data lo ponemos como lista de (x,y) x= entradas entrenamiento, y=salidas, epochs entredas a entrenar,  mini_batch__size pues el tamaño del entrenamineto, eta la tasa de aprendizaje.
         """Train the neural network using mini-batch stochastic
         gradient descent.  The ``training_data`` is a list of tuples
         ``(x, y)`` representing the training inputs and the desired
@@ -70,7 +71,7 @@ class Network(object):
             else:
                 print("Epoch {0} complete".format(j))
 
-    def update_mini_batch(self, mini_batch, eta):
+    def update_mini_batch(self, mini_batch, eta):  #para cacular gradientes para cada uno de los ejemplos de aprendizaje y luego actualiza a self.weights y self.biases.
         """Update the network's weights and biases by applying
         gradient descent using backpropagation to a single mini batch.
         The ``mini_batch`` is a list of tuples ``(x, y)``, and ``eta``
@@ -86,7 +87,7 @@ class Network(object):
         self.biases = [b-(eta/len(mini_batch))*nb
                        for b, nb in zip(self.biases, nabla_b)]
 
-    def backprop(self, x, y):
+    def backprop(self, x, y): #con el backprop calculamos los gradientes de la función de costo respecto a la red neuronal.
         """Return a tuple ``(nabla_b, nabla_w)`` representing the
         gradient for the cost function C_x.  ``nabla_b`` and
         ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
@@ -121,7 +122,7 @@ class Network(object):
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
 
-    def evaluate(self, test_data):
+    def evaluate(self, test_data): #con esto estamos seguros que se evaluo la red neuronal asi bien con el conjunto de datos de prueba y nos da el numero de predcicciones acertadas.
         """Return the number of test inputs for which the neural
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
